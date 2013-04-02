@@ -1,0 +1,42 @@
+#pragma once
+
+#include "ofMain.h"
+#include "ofxCv.h"
+#include "ofxOpenCv.h"
+#include "ofxFaceTracker.h"
+
+class testApp : public ofBaseApp{
+	
+public:
+	void setup();
+	void update();
+	void draw();
+	
+	void thresholdCam(ofVideoGrabber &in, ofImage &out);
+	void blowUpPolyline(ofPolyline &pl);
+
+	void keyPressed  (int key);
+	void keyReleased(int key);
+	void mouseMoved(int x, int y );
+	void mouseDragged(int x, int y, int button);
+	void mousePressed(int x, int y, int button);
+	void mouseReleased(int x, int y, int button);
+	void windowResized(int w, int h);
+	void dragEvent(ofDragInfo dragInfo);
+	void gotMessage(ofMessage msg);
+	
+	ofVideoGrabber cam;
+	
+	ofxCvContourFinder contourFinder;
+	ofxCvGrayscaleImage grayDiff;
+	ofxCvColorImage cImg;
+
+	ofImage thresholded;
+	unsigned char thresholdValue;
+	
+	ofxFaceTracker tracker;
+	ofVec2f position;
+	float scale;
+	ofVec3f orientation;
+	ofMatrix4x4 rotationMatrix;
+};
