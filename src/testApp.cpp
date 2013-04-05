@@ -16,6 +16,22 @@ void testApp::setup(){
 	
 	tracker.setup();
 	tracker.setRescale(.5);
+	
+	ColorScheme temp;
+	
+	// http://bit.ly/14KcXSs
+	temp.background = ofColor(90,130,110);
+	temp.print = ofColor(0,0,0);
+	temp.hair = ofColor(230,190,65);
+	temp.face = ofColor(235,170,155);
+	temp.mouth = ofColor(220,50,30);
+	temp.teeth = ofColor(250,245,225);
+	temp.eyelid = ofColor(175,180,185);
+	temp.eye = ofColor(95,145,125);
+	theColors.push_back(temp);
+	
+	// http://www.webexhibits.org/colorart/marilyns.html
+	
 }
 
 //--------------------------------------------------------------
@@ -55,8 +71,9 @@ void testApp::draw(){
 		// draw warhol test
 		ofPushMatrix();
 		ofTranslate(cam.width/2,0);
-		ofSetColor(70,190,190);
+		ofSetColor(theColors[0].background);
 		ofRect(0,0, thresholded.width,thresholded.height);
+
 		ofPolyline face = tracker.getImageFeature(ofxFaceTracker::FACE_OUTLINE);
 		ofPolyline outMouth = tracker.getImageFeature(ofxFaceTracker::OUTER_MOUTH);
 		ofPolyline inMouth = tracker.getImageFeature(ofxFaceTracker::INNER_MOUTH);
@@ -78,7 +95,7 @@ void testApp::draw(){
 		
 		// HAIR
 		if(contourFinder.nBlobs){
-			ofSetColor(255,255,0);
+			ofSetColor(theColors[0].hair);
 			ofPushMatrix();
 			ofTranslate(face.getBoundingBox().x-face.getBoundingBox().width/2,0);
             ofBeginShape();
@@ -88,13 +105,13 @@ void testApp::draw(){
 		}
 				
 		// FACE
-		ofSetColor(255,200,200);
+		ofSetColor(theColors[0].face);
 		ofBeginShape();
 		ofVertices(face.getVertices());
 		ofEndShape();
 		
 		// FOREHEAD
-		ofSetColor(255,200,200);
+		ofSetColor(theColors[0].face);
 		ofVec2f faceTrans = tracker.getImageFeature(ofxFaceTracker::NOSE_BASE).getCentroid2D()-inMouth.getCentroid2D();
 		faceTrans.normalize();
 		ofPushMatrix();
@@ -105,23 +122,23 @@ void testApp::draw(){
 		ofPopMatrix();
 
 		// MOUTH
-		ofSetColor(255,10,10);
+		ofSetColor(theColors[0].mouth);
 		ofBeginShape();
 		ofVertices(outMouth.getVertices());
 		ofEndShape();
-		ofSetColor(255,255,255);
+		ofSetColor(theColors[0].teeth);
 		ofBeginShape();
 		ofVertices(inMouth.getVertices());
 		ofEndShape();
 
 		// RIGHT EYE LID
 		ofPushMatrix();
-		ofSetColor(150,128,150);
+		ofSetColor(theColors[0].eyelid);
 		ofTranslate(-rightEyeTrans*0.3);
 		ofBeginShape();
 		ofVertices(rightEye.getVertices());
 		ofEndShape();
-		ofSetColor(255,200,200);
+		ofSetColor(theColors[0].face);
 		ofTranslate(rightEyeTrans*0.3);
 		ofBeginShape();
 		ofVertices(rightEye.getVertices());
@@ -130,17 +147,21 @@ void testApp::draw(){
 		
 		// LEFT EYE LID
 		ofPushMatrix();
-		ofSetColor(150,128,150);
+		ofSetColor(theColors[0].eyelid);
 		ofTranslate(-leftEyeTrans*0.3);
 		ofBeginShape();
 		ofVertices(leftEye.getVertices());
 		ofEndShape();
-		ofSetColor(255,200,200);
+		ofSetColor(theColors[0].face);
 		ofTranslate(leftEyeTrans*0.3);
 		ofBeginShape();
 		ofVertices(leftEye.getVertices());
 		ofEndShape();
 		ofPopMatrix();
+		
+		// TODO:
+		// RIGHT EYE
+		// LEFT EYE
 		
 		thresholded.draw(0,0);
 		ofPopMatrix();

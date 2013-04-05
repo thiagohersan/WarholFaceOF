@@ -5,6 +5,10 @@
 #include "ofxOpenCv.h"
 #include "ofxFaceTracker.h"
 
+struct ColorScheme {
+	ofColor background, print, hair, face, mouth, teeth, eyelid, eye;
+};
+
 class testApp : public ofBaseApp{
 	
 public:
@@ -39,4 +43,6 @@ public:
 	float scale;
 	ofVec3f orientation;
 	ofMatrix4x4 rotationMatrix;
+	
+	vector<ColorScheme> theColors;
 };
