@@ -196,7 +196,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
-		AF06925E170B570C00F72905 /* WarholFaceOF.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = WarholFaceOF.app; path = /Users/thiago/Dev/openFrameworks/apps/myApps/WarholFaceOF/bin/WarholFaceOF.app; sourceTree = "<absolute>"; };
+		AF06C071170F58F100CC0018 /* WarholFaceOF.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; name = WarholFaceOF.app; path = /Users/thiago/Dev/openFrameworks/apps/myApps/WarholFaceOF/bin/WarholFaceOF.app; sourceTree = "<absolute>"; };
 		AF1EEC121702D7BF00A7382A /* CLM.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CLM.h; sourceTree = "<group>"; };
 		AF1EEC131702D7BF00A7382A /* FCheck.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FCheck.h; sourceTree = "<group>"; };
 		AF1EEC141702D7BF00A7382A /* FDet.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FDet.h; sourceTree = "<group>"; };
@@ -1354,7 +1354,7 @@
 			);
 			name = WarholFaceOF;
 			productName = myOFApp;
-			productReference = AF06925E170B570C00F72905 /* WarholFaceOF.app */;
+			productReference = AF06C071170F58F100CC0018 /* WarholFaceOF.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
