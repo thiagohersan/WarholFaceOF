@@ -10,14 +10,10 @@ ColorScheme const& ColorScheme::getScheme(int i){
 
 	// proceed
 	if(i == -1){
-		// make this random
-		return theSchemes.at(0);
-	}
-	else if(i >= theSchemes.size()){
-		return theSchemes.at(theSchemes.size()-1);
+		return theSchemes.at((int)ofRandom(theSchemes.size()));
 	}
 	else{
-		return theSchemes.at(i);
+		return theSchemes.at(i%theSchemes.size());
 	}
 }
 
