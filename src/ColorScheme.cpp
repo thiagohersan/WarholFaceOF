@@ -9,7 +9,7 @@ ColorScheme const& ColorScheme::getScheme(int i){
 	}
 
 	// proceed
-	if(i == -1){
+	if(i < 0){
 		return theSchemes.at((int)ofRandom(theSchemes.size()));
 	}
 	else{
