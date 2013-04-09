@@ -99,7 +99,7 @@ void testApp::draw(){
 		ofVec2f faceTrans = tracker.getImageFeature(ofxFaceTracker::NOSE_BASE).getCentroid2D()-inMouth.getCentroid2D();
 		faceTrans.normalize();
 		ofPushMatrix();
-		ofTranslate(faceTrans*face.getBoundingBox().height/3);
+		ofTranslate(0.29*faceTrans*face.getBoundingBox().height);
 		ofBeginShape();
 		ofVertices(face.getVertices());
 		ofEndShape();
