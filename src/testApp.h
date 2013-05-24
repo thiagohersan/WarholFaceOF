@@ -6,7 +6,7 @@
 #include "ofxFaceTracker.h"
 #include "ColorScheme.h"
 
-class testApp : public ofBaseApp{
+class WarholFaceApp : public ofBaseApp{
 	
 public:
 	void setup();

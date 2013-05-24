@@ -3,7 +3,7 @@
 using namespace ofxCv;
 
 //--------------------------------------------------------------
-void testApp::setup(){
+void WarholFaceApp::setup(){
 	ofSetVerticalSync(true);
 	ofEnableAlphaBlending();
 	cam.initGrabber(640, 480);
@@ -19,7 +19,7 @@ void testApp::setup(){
 }
 
 //--------------------------------------------------------------
-void testApp::update(){
+void WarholFaceApp::update(){
 	cam.update();
 	if(cam.isFrameNew()) {
 		// face detection
@@ -35,7 +35,7 @@ void testApp::update(){
 }
 
 //--------------------------------------------------------------
-void testApp::draw(){
+void WarholFaceApp::draw(){
 	// draw regular cam
 	ofBackground(0);
 	ofSetColor(255);
@@ -148,7 +148,7 @@ void testApp::draw(){
 	}
 }
 
-void testApp::blowUpPolyline(ofPolyline &pl){
+void WarholFaceApp::blowUpPolyline(ofPolyline &pl){
 	ofPoint center = pl.getBoundingBox().getCenter();
 	for(int i=0; i<pl.size(); ++i){
 		pl[i] += pl[i]-center;
@@ -156,7 +156,7 @@ void testApp::blowUpPolyline(ofPolyline &pl){
 }
 
 // destructive: changes incoming img
-void testApp::thresholdCam(ofVideoGrabber &in, ofImage &out){
+void WarholFaceApp::thresholdCam(ofVideoGrabber &in, ofImage &out){
 	unsigned char *op = out.getPixels();
 	unsigned char *ip = in.getPixels();
 	for(int i=0; i<in.height*in.width; ++i){
@@ -170,12 +170,12 @@ void testApp::thresholdCam(ofVideoGrabber &in, ofImage &out){
 
 
 //--------------------------------------------------------------
-void testApp::keyPressed(int key){
+void WarholFaceApp::keyPressed(int key){
 	
 }
 
 //--------------------------------------------------------------
-void testApp::keyReleased(int key){
+void WarholFaceApp::keyReleased(int key){
 	tracker.reset();
 	if(key == '-' || key == '_'){
 		thresholdValue = (thresholdValue>0)?(thresholdValue-1):thresholdValue;
@@ -186,36 +186,36 @@ void testApp::keyReleased(int key){
 }
 
 //--------------------------------------------------------------
-void testApp::mouseMoved(int x, int y ){
+void WarholFaceApp::mouseMoved(int x, int y ){
 	
 }
 
 //--------------------------------------------------------------
-void testApp::mouseDragged(int x, int y, int button){
+void WarholFaceApp::mouseDragged(int x, int y, int button){
 	
 }
 
 //--------------------------------------------------------------
-void testApp::mousePressed(int x, int y, int button){
+void WarholFaceApp::mousePressed(int x, int y, int button){
 	
 }
 
 //--------------------------------------------------------------
-void testApp::mouseReleased(int x, int y, int button){
+void WarholFaceApp::mouseReleased(int x, int y, int button){
 	
 }
 
 //--------------------------------------------------------------
-void testApp::windowResized(int w, int h){
+void WarholFaceApp::windowResized(int w, int h){
 	
 }
 
 //--------------------------------------------------------------
-void testApp::gotMessage(ofMessage msg){
+void WarholFaceApp::gotMessage(ofMessage msg){
 	
 }
 
 //--------------------------------------------------------------
-void testApp::dragEvent(ofDragInfo dragInfo){
+void WarholFaceApp::dragEvent(ofDragInfo dragInfo){
 	
 }
