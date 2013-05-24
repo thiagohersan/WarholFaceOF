@@ -1,5 +1,5 @@
 #include "ofMain.h"
-#include "testApp.h"
+#include "WarholFaceApp.h"
 #include "ofAppGlutWindow.h"
 
 //========================================================================

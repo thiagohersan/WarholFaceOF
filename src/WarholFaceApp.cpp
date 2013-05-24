@@ -1,4 +1,4 @@
-#include "testApp.h"
+#include "WarholFaceApp.h"
 
 using namespace ofxCv;
 
