@@ -24,10 +24,6 @@ void testApp::update(){
 	if(cam.isFrameNew()) {
 		// face detection
 		tracker.update(toCv(cam));
-		position = tracker.getPosition();
-		scale = tracker.getScale();
-		orientation = tracker.getOrientation();
-		rotationMatrix = tracker.getRotationMatrix();
 		
 		thresholdCam(cam,thresholded);
 		
@@ -149,25 +145,6 @@ void testApp::draw(){
 		
 		thresholded.draw(0,0);
 		ofPopMatrix();
-
-		//ofMesh faceMesh = tracker.getObjectMesh();
-		//ofTranslate(position.x,position.y-240);
-		//applyMatrix(rotationMatrix);
-		//ofScale(scale,scale,scale);
-		//faceMesh.draw();
-		//ofSetColor(0,255,0);
-		//faceMesh.drawWireframe();
-		
-		/*
-		 addMessage("/gesture/mouth/width", tracker.getGesture(ofxFaceTracker::MOUTH_WIDTH));
-		 addMessage("/gesture/mouth/height", tracker.getGesture(ofxFaceTracker::MOUTH_HEIGHT));
-		 addMessage("/gesture/eyebrow/left", tracker.getGesture(ofxFaceTracker::LEFT_EYEBROW_HEIGHT));
-		 addMessage("/gesture/eyebrow/right", tracker.getGesture(ofxFaceTracker::RIGHT_EYEBROW_HEIGHT));
-		 addMessage("/gesture/eye/left", tracker.getGesture(ofxFaceTracker::LEFT_EYE_OPENNESS));
-		 addMessage("/gesture/eye/right", tracker.getGesture(ofxFaceTracker::RIGHT_EYE_OPENNESS));
-		 addMessage("/gesture/jaw", tracker.getGesture(ofxFaceTracker::JAW_OPENNESS));
-		 addMessage("/gesture/nostrils", tracker.getGesture(ofxFaceTracker::NOSTRIL_FLARE));
-		 */
 	}
 }
 

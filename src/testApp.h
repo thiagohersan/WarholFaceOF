@@ -36,8 +36,4 @@ public:
 	unsigned char thresholdValue;
 	
 	ofxFaceTracker tracker;
-	ofVec2f position;
-	float scale;
-	ofVec3f orientation;
-	ofMatrix4x4 rotationMatrix;
 };
