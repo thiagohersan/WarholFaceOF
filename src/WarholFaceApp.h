@@ -34,6 +34,9 @@ public:
 
 	ofImage thresholded;
 	unsigned char thresholdValue;
-	
+
+	long long int lastFaceTime;
+	ColorScheme currentColorScheme;
+
 	ofxFaceTracker tracker;
 };

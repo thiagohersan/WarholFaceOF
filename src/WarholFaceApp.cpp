@@ -11,6 +11,9 @@ void WarholFaceApp::setup(){
 	thresholded.allocate(cam.width,cam.height, OF_IMAGE_COLOR_ALPHA);
 	thresholdValue = 40;
 	
+	lastFaceTime = ofGetElapsedTimeMillis();
+	currentColorScheme = ColorScheme::getScheme(0);
+	
 	grayDiff.allocate(thresholded.width,thresholded.height);
 	cImg.allocate(thresholded.width,thresholded.height);
 	
@@ -48,10 +51,15 @@ void WarholFaceApp::draw(){
 	if(tracker.getFound()) {
 		//ofSetupScreenOrtho(640, 480, OF_ORIENTATION_UNKNOWN, true, -1000, 1000);
 
+		// if this is a new face, get a new color
+		if(ofGetElapsedTimeMillis()-lastFaceTime > 1000){
+			currentColorScheme = ColorScheme::getScheme();
+		}
+		
 		// draw warhol test
 		ofPushMatrix();
 		ofTranslate(cam.width/2,0);
-		ofSetColor(ColorScheme::getScheme(0).background);
+		ofSetColor(currentColorScheme.background);
 		ofRect(0,0, thresholded.width,thresholded.height);
 
 		ofPolyline face = tracker.getImageFeature(ofxFaceTracker::FACE_OUTLINE);
@@ -75,7 +83,7 @@ void WarholFaceApp::draw(){
 		
 		// HAIR
 		if(contourFinder.nBlobs){
-			ofSetColor(ColorScheme::getScheme(0).hair);
+			ofSetColor(currentColorScheme.hair);
 			ofPushMatrix();
 			ofTranslate(face.getBoundingBox().x-face.getBoundingBox().width/2,0);
             ofBeginShape();
@@ -85,13 +93,13 @@ void WarholFaceApp::draw(){
 		}
 				
 		// FACE
-		ofSetColor(ColorScheme::getScheme(0).face);
+		ofSetColor(currentColorScheme.face);
 		ofBeginShape();
 		ofVertices(face.getVertices());
 		ofEndShape();
 		
 		// FOREHEAD
-		ofSetColor(ColorScheme::getScheme(0).face);
+		ofSetColor(currentColorScheme.face);
 		ofVec2f faceTrans = tracker.getImageFeature(ofxFaceTracker::NOSE_BASE).getCentroid2D()-inMouth.getCentroid2D();
 		faceTrans.normalize();
 		ofPushMatrix();
@@ -102,23 +110,23 @@ void WarholFaceApp::draw(){
 		ofPopMatrix();
 
 		// MOUTH
-		ofSetColor(ColorScheme::getScheme(0).mouth);
+		ofSetColor(currentColorScheme.mouth);
 		ofBeginShape();
 		ofVertices(outMouth.getVertices());
 		ofEndShape();
-		ofSetColor(ColorScheme::getScheme(0).teeth);
+		ofSetColor(currentColorScheme.teeth);
 		ofBeginShape();
 		ofVertices(inMouth.getVertices());
 		ofEndShape();
 
 		// RIGHT EYE LID
 		ofPushMatrix();
-		ofSetColor(ColorScheme::getScheme(0).eyelid);
+		ofSetColor(currentColorScheme.eyelid);
 		ofTranslate(-rightEyeTrans*0.3);
 		ofBeginShape();
 		ofVertices(rightEye.getVertices());
 		ofEndShape();
-		ofSetColor(ColorScheme::getScheme(0).face);
+		ofSetColor(currentColorScheme.face);
 		ofTranslate(rightEyeTrans*0.3);
 		ofBeginShape();
 		ofVertices(rightEye.getVertices());
@@ -127,12 +135,12 @@ void WarholFaceApp::draw(){
 		
 		// LEFT EYE LID
 		ofPushMatrix();
-		ofSetColor(ColorScheme::getScheme(0).eyelid);
+		ofSetColor(currentColorScheme.eyelid);
 		ofTranslate(-leftEyeTrans*0.3);
 		ofBeginShape();
 		ofVertices(leftEye.getVertices());
 		ofEndShape();
-		ofSetColor(ColorScheme::getScheme(0).face);
+		ofSetColor(currentColorScheme.face);
 		ofTranslate(leftEyeTrans*0.3);
 		ofBeginShape();
 		ofVertices(leftEye.getVertices());
@@ -145,6 +153,9 @@ void WarholFaceApp::draw(){
 		
 		thresholded.draw(0,0);
 		ofPopMatrix();
+		
+		// update timer
+		lastFaceTime = ofGetElapsedTimeMillis();
 	}
 }
 
