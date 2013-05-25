@@ -1326,8 +1326,8 @@
 				E4B69E1D0A3A1BDC003C02F2 /* main.cpp */,
 				E4B69E1E0A3A1BDC003C02F2 /* WarholFaceApp.cpp */,
 				E4B69E1F0A3A1BDC003C02F2 /* WarholFaceApp.h */,
-				AFA9C3191713474200494A56 /* ColorScheme.cpp */,
 				AFA9C31A1713474200494A56 /* ColorScheme.h */,
+				AFA9C3191713474200494A56 /* ColorScheme.cpp */,
 			);
 			path = src;
 			sourceTree = SOURCE_ROOT;
