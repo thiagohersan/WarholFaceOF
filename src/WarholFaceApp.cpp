@@ -146,10 +146,14 @@ void WarholFaceApp::draw(){
 		ofVertices(leftEye.getVertices());
 		ofEndShape();
 		ofPopMatrix();
-		
-		// TODO:
+
 		// RIGHT EYE
+		ofSetColor(currentColorScheme.eye);
+		ofCircle(rightEye.getCentroid2D(), 0.5*min(rightEye.getBoundingBox().getWidth(),rightEye.getBoundingBox().getHeight()));
+		
 		// LEFT EYE
+		ofSetColor(currentColorScheme.eye);
+		ofCircle(leftEye.getCentroid2D(), 0.5*min(leftEye.getBoundingBox().getWidth(),leftEye.getBoundingBox().getHeight()));
 		
 		thresholded.draw(0,0);
 		ofPopMatrix();
