@@ -83,23 +83,63 @@ void ColorScheme::populateSchemes(){
 	temp.eye = ofColor(75,80,45);
 	theSchemes.push_back(temp);
 
-	temp.background = ofColor(215,40,90);
-	temp.print = ofColor(45,60,120);
-	temp.hair = ofColor(210,150,130);
-	temp.face = ofColor(215,55,15);
-	temp.mouth = ofColor(45,60,80);
-	temp.teeth = ofColor(215,155,0);
-	temp.eyelid = ofColor(210,45,85);
-	temp.eye = ofColor(190,115,115);
+	temp.background = ofColor(200,17,0);
+	temp.print = ofColor(0,0,0);
+	temp.hair = ofColor(255,245,0);
+	temp.face = ofColor(254,231,152);
+	temp.mouth = ofColor(194,16,0);
+	temp.teeth = ofColor(250,245,230);
+	temp.eyelid = ofColor(200,17,0);
+	temp.eye = ofColor(244,234,0);
 	theSchemes.push_back(temp);
 
-	temp.background = ofColor(180,205,105);
-	temp.print = ofColor(165,30,20);
-	temp.hair = ofColor(245,195,40);
-	temp.face = ofColor(125,170,65);
-	temp.mouth = ofColor(210,40,60);
-	temp.teeth = ofColor(205,65,110);
-	temp.eyelid = ofColor(250,200,115);
-	temp.eye = ofColor(200,165,90);
+	temp.background = ofColor(225,14,135);
+	temp.print = ofColor(0,5,25);
+	temp.hair = ofColor(187,26,0);
+	temp.face = ofColor(178,162,0);
+	temp.mouth = ofColor(194,0,166);
+	temp.teeth = ofColor(250,220,250);
+	temp.eyelid = ofColor(225,14,135);
+	temp.eye = ofColor(187,26,0);
+	theSchemes.push_back(temp);
+
+	temp.background = ofColor(36,81,90);
+	temp.print = ofColor(35,45,80);
+	temp.hair = ofColor(54,211,0);
+	temp.face = ofColor(112,95,171);
+	temp.mouth = ofColor(150,137,0);
+	temp.teeth = ofColor(150,190,150);
+	temp.eyelid = ofColor(36,81,90);
+	temp.eye = ofColor(54,211,0);
+	theSchemes.push_back(temp);
+
+	temp.background = ofColor(250,98,140);
+	temp.print = ofColor(39,62,52);
+	temp.hair = ofColor(236,225,0);
+	temp.face = ofColor(130,160,140);
+	temp.mouth = ofColor(233,83,165);
+	temp.teeth = ofColor(233,240,250);
+	temp.eyelid = ofColor(250,98,140);
+	temp.eye = ofColor(236,225,0);
+	theSchemes.push_back(temp);
+
+	temp.background = ofColor(76,140,0);
+	temp.print = ofColor(0,0,0);
+	temp.hair = ofColor(150,74,252);
+	temp.face = ofColor(180,180,117);
+	temp.mouth = ofColor(36,50,2);
+	temp.teeth = ofColor(76,140,0);
+	temp.eyelid = ofColor(36,50,2);
+	temp.eye = ofColor(150,74,252);
+	theSchemes.push_back(temp);
+
+	temp.background = ofColor(40,83,118);
+	temp.print = ofColor(56,47,71);
+	temp.hair = ofColor(196,90,225);
+	temp.face = ofColor(37,102,78);
+	temp.mouth = ofColor(196,90,225);
+	temp.teeth = ofColor(138,152,0);
+	temp.eyelid = ofColor(40,83,118);
+	temp.eye = ofColor(196,90,225);
 	theSchemes.push_back(temp);
 }
