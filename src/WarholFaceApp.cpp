@@ -7,19 +7,20 @@ void WarholFaceApp::setup(){
 	ofSetVerticalSync(true);
 	ofEnableAlphaBlending();
 	cam.initGrabber(640, 480);
-	
+
+	cImg.allocate(cam.width,cam.height);
+	grayDiff.allocate(cam.width,cam.height);
+	for(int i=0; i<2; ++i){
+		previousFrames[i].allocate(cam.width, cam.height);
+	}
+	previousFramesIndex = 0;
+
 	hairLayer.allocate(cam.width,cam.height, OF_IMAGE_COLOR_ALPHA);
 	printLayer.allocate(cam.width,cam.height, OF_IMAGE_COLOR_ALPHA);
 	thresholdValue = 40;
-	
+
 	lastFaceTime = ofGetElapsedTimeMillis();
 	currentColorScheme = ColorScheme::getScheme(0);
-	
-	grayDiff.allocate(cam.width,cam.height);
-	cImg.allocate(cam.width,cam.height);
-	
-	previousFramesIndex = 0;
-	previousFrames[0].allocate(cam.width, cam.height);
 
 	tracker.setup();
 	tracker.setRescale(.5);

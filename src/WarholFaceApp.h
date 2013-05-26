@@ -29,9 +29,8 @@ public:
 	
 	ofVideoGrabber cam;
 
-	ofxCvGrayscaleImage grayDiff;
 	ofxCvColorImage cImg;
-	
+	ofxCvGrayscaleImage grayDiff;
 	ofxCvGrayscaleImage previousFrames[2];
 	unsigned int previousFramesIndex;
 
