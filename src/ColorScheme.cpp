@@ -1,6 +1,7 @@
 #include "ColorScheme.h"
 
 vector<ColorScheme> ColorScheme::theSchemes = vector<ColorScheme>();
+unsigned int ColorScheme::currentSchemeIndex = 0;
 
 ColorScheme const& ColorScheme::getScheme(int i){
 	// first time this is called, fill it with stuff
@@ -9,12 +10,8 @@ ColorScheme const& ColorScheme::getScheme(int i){
 	}
 
 	// proceed
-	if(i < 0){
-		return theSchemes.at((int)ofRandom(theSchemes.size()));
-	}
-	else{
-		return theSchemes.at(i%theSchemes.size());
-	}
+	currentSchemeIndex = (i < 0)?(int)ofRandom(theSchemes.size()):((currentSchemeIndex+i)%theSchemes.size());
+	return theSchemes.at(currentSchemeIndex);
 }
 
 void ColorScheme::populateSchemes(){

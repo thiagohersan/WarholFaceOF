@@ -9,4 +9,5 @@ public:
 private:
 	static vector<ColorScheme> theSchemes;
 	static void populateSchemes();
+	static unsigned int currentSchemeIndex;
 };
