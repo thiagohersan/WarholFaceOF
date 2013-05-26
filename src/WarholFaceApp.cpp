@@ -36,7 +36,7 @@ void WarholFaceApp::update(){
 
 		// keep previous camera color image as a grayscale cv image
 		previousFrames[previousFramesIndex] = cImg;
-		previousFrames[previousFramesIndex].blurHeavily();
+		previousFrames[previousFramesIndex].blur(23);
 		previousFramesIndex = (previousFramesIndex+1)%2;
 
 		// get new camera image
@@ -46,7 +46,7 @@ void WarholFaceApp::update(){
 
 		// get diff between frames with blur to get person outline
 		previousFrames[previousFramesIndex].absDiff(grayDiff);
-		previousFrames[previousFramesIndex].blurHeavily();
+		previousFrames[previousFramesIndex].blur(17);
 		previousFrames[previousFramesIndex].threshold(4,false);
 		// makes a layer where outline is white and everything else is transparent
 		makeBlackTransparent(previousFrames[previousFramesIndex],hairLayer);
