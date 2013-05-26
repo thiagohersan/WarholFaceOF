@@ -99,8 +99,8 @@ void WarholFaceApp::drawFace(){
 	if(tracker.getFound()) {
 		ofPushMatrix();
 		ofTranslate(-mFaceFeatures.cropArea.x,-mFaceFeatures.cropArea.y);
+
 		// draw shapes and color
-		
 		// BACKGROUND
 		ofSetColor(currentColorScheme.background);
 		ofRect(0,0, cam.width,cam.height);
@@ -188,17 +188,22 @@ void WarholFaceApp::draw(){
 	ofSetColor(255,255,0);
 	ofDrawBitmapString(ofToString((int) ofGetFrameRate()), 10, cam.height+20);
 
+	// create 12
 	for(int i=0; i<12; ++i){
-		//currentColorScheme = ColorScheme::getScheme(i);
+		currentColorScheme = ColorScheme::getScheme(i);
 		faceFbos[i].begin();
 		drawFace();
 		faceFbos[i].end();
 	}
 
-	ofSetColor(255);
-	faceFbos[0].getTextureReference().drawSubsection(0, 0, mFaceFeatures.cropArea.width, mFaceFeatures.cropArea.height, 1,1);
-	//ofTranslate(cropArea.width,0);
-	//faceFbos[0].getTextureReference().drawSubsection(0, 0, cropArea.width, cropArea.height, 1,1);
+	// can draw more than 12
+	for(int i=0;i<12;++i){
+		ofPushMatrix();
+		ofTranslate((i%6)*mFaceFeatures.cropArea.width,(i/6)*mFaceFeatures.cropArea.height);
+		ofSetColor(255);
+		faceFbos[i].getTextureReference().drawSubsection(0, 0, mFaceFeatures.cropArea.width, mFaceFeatures.cropArea.height, 1,1);
+		ofPopMatrix();
+	}
 }
 
 void FaceFeatures::blowUpPolyline(ofPolyline &pl){
