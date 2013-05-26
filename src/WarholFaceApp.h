@@ -40,5 +40,10 @@ public:
 	long long int lastFaceTime;
 	ColorScheme currentColorScheme;
 
+	ofFbo faceFbo;
+
 	ofxFaceTracker tracker;
+
+private:
+	void drawFace();
 };
