@@ -8,15 +8,19 @@ void WarholFaceApp::setup(){
 	ofEnableAlphaBlending();
 	cam.initGrabber(640, 480);
 	
-	thresholded.allocate(cam.width,cam.height, OF_IMAGE_COLOR_ALPHA);
+	hairLayer.allocate(cam.width,cam.height, OF_IMAGE_COLOR_ALPHA);
+	printLayer.allocate(cam.width,cam.height, OF_IMAGE_COLOR_ALPHA);
 	thresholdValue = 40;
 	
 	lastFaceTime = ofGetElapsedTimeMillis();
 	currentColorScheme = ColorScheme::getScheme(0);
 	
-	grayDiff.allocate(thresholded.width,thresholded.height);
-	cImg.allocate(thresholded.width,thresholded.height);
+	grayDiff.allocate(cam.width,cam.height);
+	cImg.allocate(cam.width,cam.height);
 	
+	previousFramesIndex = 0;
+	previousFrames[0].allocate(cam.width, cam.height);
+
 	tracker.setup();
 	tracker.setRescale(.5);
 }
@@ -27,41 +31,43 @@ void WarholFaceApp::update(){
 	if(cam.isFrameNew()) {
 		// face detection
 		tracker.update(toCv(cam));
-		
-		thresholdCam(cam,thresholded);
-		
+		// get a copy for the print layer
+		thresholdCam(cam,printLayer);
+
+		// keep previous camera color image as a grayscale cv image
+		previousFrames[previousFramesIndex] = cImg;
+		previousFrames[previousFramesIndex].blurHeavily();
+		previousFramesIndex = (previousFramesIndex+1)%2;
+
+		// get new camera image
 		cImg.setFromPixels(cam.getPixelsRef());
-		grayDiff.setROI(0,0, cam.width,cam.height);
 		grayDiff = cImg;
-		grayDiff.threshold(80,true);
+		//grayDiff.blur();
+
+		// get diff between frames with blur to get person outline
+		previousFrames[previousFramesIndex].absDiff(grayDiff);
+		previousFrames[previousFramesIndex].blurHeavily();
+		previousFrames[previousFramesIndex].threshold(4,false);
+		// makes a layer where outline is white and everything else is transparent
+		makeBlackTransparent(previousFrames[previousFramesIndex],hairLayer);
 	}
 }
 
 //--------------------------------------------------------------
 void WarholFaceApp::draw(){
-	// draw regular cam
 	ofBackground(0);
 	ofSetColor(255);
-	//cam.draw(0, 0);
-	//grayDiff.draw(0,0);
 
 	ofSetColor(255,255,0);
 	ofDrawBitmapString(ofToString((int) ofGetFrameRate()), 10, cam.height+20);
 
 	if(tracker.getFound()) {
-		//ofSetupScreenOrtho(640, 480, OF_ORIENTATION_UNKNOWN, true, -1000, 1000);
-
 		// if this is a new face, get a new color
 		if(ofGetElapsedTimeMillis()-lastFaceTime > 1000){
 			currentColorScheme = ColorScheme::getScheme();
 		}
-		
-		// draw warhol test
-		ofPushMatrix();
-		ofTranslate(cam.width/2,0);
-		ofSetColor(currentColorScheme.background);
-		ofRect(0,0, thresholded.width,thresholded.height);
 
+		// get poly lines
 		ofPolyline face = tracker.getImageFeature(ofxFaceTracker::FACE_OUTLINE);
 		ofPolyline outMouth = tracker.getImageFeature(ofxFaceTracker::OUTER_MOUTH);
 		ofPolyline inMouth = tracker.getImageFeature(ofxFaceTracker::INNER_MOUTH);
@@ -69,29 +75,29 @@ void WarholFaceApp::draw(){
 		ofPolyline leftEyebrow = tracker.getImageFeature(ofxFaceTracker::LEFT_EYEBROW);
 		ofPolyline rightEye = tracker.getImageFeature(ofxFaceTracker::RIGHT_EYE);
 		ofPolyline leftEye = tracker.getImageFeature(ofxFaceTracker::LEFT_EYE);
-		
+
+		// for eye lids
 		blowUpPolyline(rightEye);
 		blowUpPolyline(leftEye);
-		
 		ofVec2f rightEyeTrans = rightEye.getBoundingBox().getCenter()-rightEyebrow.getBoundingBox().getCenter();
 		ofVec2f leftEyeTrans = leftEye.getBoundingBox().getCenter()-leftEyebrow.getBoundingBox().getCenter();
 		
-		// find head outline
-		grayDiff.setROI(face.getBoundingBox().x-face.getBoundingBox().width/2,0,
-						face.getBoundingBox().width*2,face.getBoundingBox().y+face.getBoundingBox().height);
-		contourFinder.findContours(grayDiff, 500, cam.width*cam.height/2, 1, true);
-		
+		// bounding box
+		float x0 = face.getBoundingBox().x-face.getBoundingBox().width/1.666;
+		float y0 = (face.getBoundingBox().y+face.getBoundingBox().height*1.1)-face.getBoundingBox().width*2.2;
+		if(y0 < 0) y0 = 0;
+		ofTranslate(-x0,-y0);
+
+		// draw shapes and color
+
+		// BACKGROUND
+		ofSetColor(currentColorScheme.background);
+		ofRect(0,0, cam.width,cam.height);
+
 		// HAIR
-		if(contourFinder.nBlobs){
-			ofSetColor(currentColorScheme.hair);
-			ofPushMatrix();
-			ofTranslate(face.getBoundingBox().x-face.getBoundingBox().width/2,0);
-            ofBeginShape();
-			ofVertices(contourFinder.blobs[0].pts);
-            ofEndShape(true);
-			ofPopMatrix();
-		}
-				
+		ofSetColor(currentColorScheme.hair);
+		hairLayer.draw(0,0);
+
 		// FACE
 		ofSetColor(currentColorScheme.face);
 		ofBeginShape();
@@ -155,8 +161,8 @@ void WarholFaceApp::draw(){
 		ofSetColor(currentColorScheme.eye);
 		ofCircle(leftEye.getCentroid2D(), 0.5*min(leftEye.getBoundingBox().getWidth(),leftEye.getBoundingBox().getHeight()));
 		
-		thresholded.draw(0,0);
-		ofPopMatrix();
+		// PRINT
+		printLayer.draw(0,0);
 		
 		// update timer
 		lastFaceTime = ofGetElapsedTimeMillis();
@@ -175,9 +181,20 @@ void WarholFaceApp::thresholdCam(ofVideoGrabber &in, ofImage &out){
 	unsigned char *op = out.getPixels();
 	unsigned char *ip = in.getPixels();
 	for(int i=0; i<in.height*in.width; ++i){
-		float gray = 0.2989*float(ip[i*3+0]) + 0.5870*float(ip[i*3+1]) + 0.1140*float(ip[i*3+2]);
+		float gray = 0.21*float(ip[i*3+0]) + 0.71*float(ip[i*3+1]) + 0.07*float(ip[i*3+2]);
 		op[i*4+0] = op[i*4+1] = op[i*4+2] = (gray < thresholdValue)?0:255;
 		op[i*4+3] = (gray < thresholdValue)?255:0;
+	}
+	out.update();
+}
+
+// makes black pixels transparent
+void WarholFaceApp::makeBlackTransparent(ofxCvGrayscaleImage &in, ofImage &out){
+	unsigned char *ip = in.getPixels();
+	unsigned char *op = out.getPixels();
+	for(int i=0; i<in.height*in.width; ++i){
+		op[i*4+0] = op[i*4+1] = op[i*4+2] = (ip[i] < 10)?0:255;
+		op[i*4+3] = (ip[i] < 10)?0:255;
 	}
 	out.update();
 }

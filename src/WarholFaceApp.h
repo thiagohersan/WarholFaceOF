@@ -14,6 +14,7 @@ public:
 	void draw();
 	
 	void thresholdCam(ofVideoGrabber &in, ofImage &out);
+	void makeBlackTransparent(ofxCvGrayscaleImage &in, ofImage &out);
 	void blowUpPolyline(ofPolyline &pl);
 
 	void keyPressed  (int key);
@@ -27,12 +28,14 @@ public:
 	void gotMessage(ofMessage msg);
 	
 	ofVideoGrabber cam;
-	
-	ofxCvContourFinder contourFinder;
+
 	ofxCvGrayscaleImage grayDiff;
 	ofxCvColorImage cImg;
+	
+	ofxCvGrayscaleImage previousFrames[2];
+	unsigned int previousFramesIndex;
 
-	ofImage thresholded;
+	ofImage printLayer, hairLayer;
 	unsigned char thresholdValue;
 
 	long long int lastFaceTime;
