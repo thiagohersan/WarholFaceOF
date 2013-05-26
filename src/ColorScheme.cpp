@@ -9,9 +9,14 @@ ColorScheme const& ColorScheme::getScheme(int i){
 		populateSchemes();
 	}
 
-	// proceed
-	currentSchemeIndex = (i < 0)?(int)ofRandom(theSchemes.size()):((currentSchemeIndex+i)%theSchemes.size());
-	return theSchemes.at(currentSchemeIndex);
+	// proceed: get a new current index
+	if(i < 0){
+		currentSchemeIndex = (int)ofRandom(theSchemes.size());
+		return theSchemes.at(currentSchemeIndex);
+	}
+	else{
+		return theSchemes.at((currentSchemeIndex+i)%theSchemes.size());
+	}
 }
 
 void ColorScheme::populateSchemes(){
