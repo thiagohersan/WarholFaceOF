@@ -6,6 +6,17 @@
 #include "ofxFaceTracker.h"
 #include "ColorScheme.h"
 
+class FaceFeatures{
+public:
+	ofPolyline face, outMouth, inMouth;
+	ofPolyline rightEyebrow, leftEyebrow;
+	ofPolyline rightEye, leftEye;
+	ofVec2f rightEyeTrans, leftEyeTrans;
+	ofVec2f faceTrans;
+	ofRectangle cropArea;
+	static void blowUpPolyline(ofPolyline &pl);
+};
+
 class WarholFaceApp : public ofBaseApp{
 	
 public:
@@ -15,7 +26,6 @@ public:
 	
 	void thresholdCam(ofVideoGrabber &in, ofImage &out);
 	void makeBlackTransparent(ofxCvGrayscaleImage &in, ofImage &out);
-	void blowUpPolyline(ofPolyline &pl);
 
 	void keyPressed  (int key);
 	void keyReleased(int key);
@@ -40,7 +50,8 @@ public:
 	long long int lastFaceTime;
 	ColorScheme currentColorScheme;
 
-	ofFbo faceFbo;
+	ofFbo faceFbos[12];
+	FaceFeatures mFaceFeatures;
 
 	ofxFaceTracker tracker;
 

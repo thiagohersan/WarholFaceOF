@@ -22,7 +22,10 @@ void WarholFaceApp::setup(){
 	lastFaceTime = ofGetElapsedTimeMillis();
 	currentColorScheme = ColorScheme::getScheme(0);
 
-	faceFbo.allocate(cam.width, cam.height);
+	for(int i=0; i<12; ++i){
+		faceFbos[i].allocate(cam.width, cam.height);
+	}
+	//mFaceFeatures.cropArea.set(0,0,cam.width, cam.height);
 
 	tracker.setup();
 	tracker.setRescale(.5);
@@ -49,41 +52,53 @@ void WarholFaceApp::update(){
 
 		// get diff between frames with blur to get person outline
 		previousFrames[previousFramesIndex].absDiff(grayDiff);
-		previousFrames[previousFramesIndex].blur(17);
+		previousFrames[previousFramesIndex].blur(27);
 		previousFrames[previousFramesIndex].threshold(4,false);
 		// makes a layer where outline is white and everything else is transparent
 		makeBlackTransparent(previousFrames[previousFramesIndex],hairLayer);
 	}
-}
-
-void WarholFaceApp::drawFace(){
+	
+	////
 	if(tracker.getFound()) {
 		// if this is a new face, get a new color
 		if(ofGetElapsedTimeMillis()-lastFaceTime > 1000){
 			currentColorScheme = ColorScheme::getScheme();
 		}
-		
+
 		// get poly lines
-		ofPolyline face = tracker.getImageFeature(ofxFaceTracker::FACE_OUTLINE);
-		ofPolyline outMouth = tracker.getImageFeature(ofxFaceTracker::OUTER_MOUTH);
-		ofPolyline inMouth = tracker.getImageFeature(ofxFaceTracker::INNER_MOUTH);
-		ofPolyline rightEyebrow = tracker.getImageFeature(ofxFaceTracker::RIGHT_EYEBROW);
-		ofPolyline leftEyebrow = tracker.getImageFeature(ofxFaceTracker::LEFT_EYEBROW);
-		ofPolyline rightEye = tracker.getImageFeature(ofxFaceTracker::RIGHT_EYE);
-		ofPolyline leftEye = tracker.getImageFeature(ofxFaceTracker::LEFT_EYE);
-		
+		mFaceFeatures.face = tracker.getImageFeature(ofxFaceTracker::FACE_OUTLINE);
+		mFaceFeatures.outMouth = tracker.getImageFeature(ofxFaceTracker::OUTER_MOUTH);
+		mFaceFeatures.inMouth = tracker.getImageFeature(ofxFaceTracker::INNER_MOUTH);
+		mFaceFeatures.rightEyebrow = tracker.getImageFeature(ofxFaceTracker::RIGHT_EYEBROW);
+		mFaceFeatures.leftEyebrow = tracker.getImageFeature(ofxFaceTracker::LEFT_EYEBROW);
+		mFaceFeatures.rightEye = tracker.getImageFeature(ofxFaceTracker::RIGHT_EYE);
+		mFaceFeatures.leftEye = tracker.getImageFeature(ofxFaceTracker::LEFT_EYE);
+
+		// for forehead
+		mFaceFeatures.faceTrans = tracker.getImageFeature(ofxFaceTracker::NOSE_BASE).getCentroid2D()-mFaceFeatures.inMouth.getCentroid2D();
+		mFaceFeatures.faceTrans.normalize();
+
 		// for eye lids
-		blowUpPolyline(rightEye);
-		blowUpPolyline(leftEye);
-		ofVec2f rightEyeTrans = rightEye.getBoundingBox().getCenter()-rightEyebrow.getBoundingBox().getCenter();
-		ofVec2f leftEyeTrans = leftEye.getBoundingBox().getCenter()-leftEyebrow.getBoundingBox().getCenter();
-		
+		FaceFeatures::blowUpPolyline(mFaceFeatures.rightEye);
+		FaceFeatures::blowUpPolyline(mFaceFeatures.leftEye);
+		mFaceFeatures.rightEyeTrans = mFaceFeatures.rightEye.getBoundingBox().getCenter()-mFaceFeatures.rightEyebrow.getBoundingBox().getCenter();
+		mFaceFeatures.leftEyeTrans = mFaceFeatures.leftEye.getBoundingBox().getCenter()-mFaceFeatures.leftEyebrow.getBoundingBox().getCenter();
+
 		// bounding box
-		float x0 = face.getBoundingBox().x-face.getBoundingBox().width/1.666;
-		float y0 = (face.getBoundingBox().y+face.getBoundingBox().height*1.1)-face.getBoundingBox().width*2.2;
+		float x0 = mFaceFeatures.face.getBoundingBox().x-mFaceFeatures.face.getBoundingBox().width/1.666;
+		float y0 = (mFaceFeatures.face.getBoundingBox().y+mFaceFeatures.face.getBoundingBox().height*1.1)-mFaceFeatures.face.getBoundingBox().width*2.2;
 		if(y0 < 0) y0 = 0;
-		//ofTranslate(-x0,-y0);
+		mFaceFeatures.cropArea.set(x0,y0,mFaceFeatures.face.getBoundingBox().width*2.2,mFaceFeatures.face.getBoundingBox().width*2.2);
 		
+		// update timer
+		lastFaceTime = ofGetElapsedTimeMillis();
+	}
+}
+
+void WarholFaceApp::drawFace(){
+	if(tracker.getFound()) {
+		ofPushMatrix();
+		ofTranslate(-mFaceFeatures.cropArea.x,-mFaceFeatures.cropArea.y);
 		// draw shapes and color
 		
 		// BACKGROUND
@@ -97,72 +112,68 @@ void WarholFaceApp::drawFace(){
 		// FACE
 		ofSetColor(currentColorScheme.face);
 		ofBeginShape();
-		ofVertices(face.getVertices());
+		ofVertices(mFaceFeatures.face.getVertices());
 		ofEndShape();
 		
 		// FOREHEAD
 		ofSetColor(currentColorScheme.face);
-		ofVec2f faceTrans = tracker.getImageFeature(ofxFaceTracker::NOSE_BASE).getCentroid2D()-inMouth.getCentroid2D();
-		faceTrans.normalize();
 		ofPushMatrix();
-		ofTranslate(0.29*faceTrans*face.getBoundingBox().height);
+		ofTranslate(0.29*mFaceFeatures.faceTrans*mFaceFeatures.face.getBoundingBox().height);
 		ofBeginShape();
-		ofVertices(face.getVertices());
+		ofVertices(mFaceFeatures.face.getVertices());
 		ofEndShape();
 		ofPopMatrix();
 		
 		// MOUTH
 		ofSetColor(currentColorScheme.mouth);
 		ofBeginShape();
-		ofVertices(outMouth.getVertices());
+		ofVertices(mFaceFeatures.outMouth.getVertices());
 		ofEndShape();
 		ofSetColor(currentColorScheme.teeth);
 		ofBeginShape();
-		ofVertices(inMouth.getVertices());
+		ofVertices(mFaceFeatures.inMouth.getVertices());
 		ofEndShape();
 		
 		// RIGHT EYE LID
 		ofPushMatrix();
 		ofSetColor(currentColorScheme.eyelid);
-		ofTranslate(-rightEyeTrans*0.3);
+		ofTranslate(-mFaceFeatures.rightEyeTrans*0.3);
 		ofBeginShape();
-		ofVertices(rightEye.getVertices());
+		ofVertices(mFaceFeatures.rightEye.getVertices());
 		ofEndShape();
 		ofSetColor(currentColorScheme.face);
-		ofTranslate(rightEyeTrans*0.3);
+		ofTranslate(mFaceFeatures.rightEyeTrans*0.3);
 		ofBeginShape();
-		ofVertices(rightEye.getVertices());
+		ofVertices(mFaceFeatures.rightEye.getVertices());
 		ofEndShape();
 		ofPopMatrix();
 		
 		// LEFT EYE LID
 		ofPushMatrix();
 		ofSetColor(currentColorScheme.eyelid);
-		ofTranslate(-leftEyeTrans*0.3);
+		ofTranslate(-mFaceFeatures.leftEyeTrans*0.3);
 		ofBeginShape();
-		ofVertices(leftEye.getVertices());
+		ofVertices(mFaceFeatures.leftEye.getVertices());
 		ofEndShape();
 		ofSetColor(currentColorScheme.face);
-		ofTranslate(leftEyeTrans*0.3);
+		ofTranslate(mFaceFeatures.leftEyeTrans*0.3);
 		ofBeginShape();
-		ofVertices(leftEye.getVertices());
+		ofVertices(mFaceFeatures.leftEye.getVertices());
 		ofEndShape();
 		ofPopMatrix();
 		
 		// RIGHT EYE
 		ofSetColor(currentColorScheme.eye);
-		ofCircle(rightEye.getCentroid2D(), 0.5*min(rightEye.getBoundingBox().getWidth(),rightEye.getBoundingBox().getHeight()));
+		ofCircle(mFaceFeatures.rightEye.getCentroid2D(), 0.5*min(mFaceFeatures.rightEye.getBoundingBox().getWidth(),mFaceFeatures.rightEye.getBoundingBox().getHeight()));
 		
 		// LEFT EYE
 		ofSetColor(currentColorScheme.eye);
-		ofCircle(leftEye.getCentroid2D(), 0.5*min(leftEye.getBoundingBox().getWidth(),leftEye.getBoundingBox().getHeight()));
+		ofCircle(mFaceFeatures.leftEye.getCentroid2D(), 0.5*min(mFaceFeatures.leftEye.getBoundingBox().getWidth(),mFaceFeatures.leftEye.getBoundingBox().getHeight()));
 		
 		// PRINT
 		ofSetColor(currentColorScheme.print);
 		printLayer.draw(0,0);
-
-		// update timer
-		lastFaceTime = ofGetElapsedTimeMillis();
+		ofPopMatrix();
 	}
 	else{
 		ofClear(0);
@@ -177,15 +188,20 @@ void WarholFaceApp::draw(){
 	ofSetColor(255,255,0);
 	ofDrawBitmapString(ofToString((int) ofGetFrameRate()), 10, cam.height+20);
 
-	faceFbo.begin();
-	drawFace();
-	faceFbo.end();
-	
+	for(int i=0; i<12; ++i){
+		//currentColorScheme = ColorScheme::getScheme(i);
+		faceFbos[i].begin();
+		drawFace();
+		faceFbos[i].end();
+	}
+
 	ofSetColor(255);
-	faceFbo.getTextureReference().draw(cam.width/2,200);	
+	faceFbos[0].getTextureReference().drawSubsection(0, 0, mFaceFeatures.cropArea.width, mFaceFeatures.cropArea.height, 1,1);
+	//ofTranslate(cropArea.width,0);
+	//faceFbos[0].getTextureReference().drawSubsection(0, 0, cropArea.width, cropArea.height, 1,1);
 }
 
-void WarholFaceApp::blowUpPolyline(ofPolyline &pl){
+void FaceFeatures::blowUpPolyline(ofPolyline &pl){
 	ofPoint center = pl.getBoundingBox().getCenter();
 	for(int i=0; i<pl.size(); ++i){
 		pl[i] += pl[i]-center;
