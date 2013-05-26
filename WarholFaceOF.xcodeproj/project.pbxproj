@@ -144,6 +144,9 @@
 		AF1EF0D71702DA4900A7382A /* Utilities.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF1EF0081702DA4600A7382A /* Utilities.cpp */; };
 		AF1EF0D81702DA4900A7382A /* Wrappers.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AF1EF0091702DA4600A7382A /* Wrappers.cpp */; };
 		AFA9C31B1713474200494A56 /* ColorScheme.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFA9C3191713474200494A56 /* ColorScheme.cpp */; };
+		AFEB3A7A1751FBFC00D8419B /* ObjectFinder.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFEB3A791751FBFC00D8419B /* ObjectFinder.cpp */; };
+		AFEB3A851751FC7000D8419B /* ETF.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFEB3A831751FC7000D8419B /* ETF.cpp */; };
+		AFEB3A861751FC7000D8419B /* fdog.cpp in Sources */ = {isa = PBXBuildFile; fileRef = AFEB3A841751FC7000D8419B /* fdog.cpp */; };
 		BBAB23CB13894F3D00AA2426 /* GLUT.framework in CopyFiles */ = {isa = PBXBuildFile; fileRef = BBAB23BE13894E4700AA2426 /* GLUT.framework */; };
 		E4328149138ABC9F0047C5CB /* openFrameworksDebug.a in Frameworks */ = {isa = PBXBuildFile; fileRef = E4328148138ABC890047C5CB /* openFrameworksDebug.a */; };
 		E45BE97B0E8CC7DD009D7055 /* AGL.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = E45BE9710E8CC7DD009D7055 /* AGL.framework */; };
@@ -460,6 +463,14 @@
 		AF8D9BD21710292B00C97CC2 /* WarholFaceOFDebug.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WarholFaceOFDebug.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		AFA9C3191713474200494A56 /* ColorScheme.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ColorScheme.cpp; sourceTree = "<group>"; };
 		AFA9C31A1713474200494A56 /* ColorScheme.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ColorScheme.h; sourceTree = "<group>"; };
+		AFEB3A781751FBF400D8419B /* ObjectFinder.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ObjectFinder.h; sourceTree = "<group>"; };
+		AFEB3A791751FBFC00D8419B /* ObjectFinder.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ObjectFinder.cpp; sourceTree = "<group>"; };
+		AFEB3A7E1751FC7000D8419B /* ETF.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = ETF.h; sourceTree = "<group>"; };
+		AFEB3A7F1751FC7000D8419B /* fdog.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = fdog.h; sourceTree = "<group>"; };
+		AFEB3A801751FC7000D8419B /* imatrix.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = imatrix.h; sourceTree = "<group>"; };
+		AFEB3A811751FC7000D8419B /* myvec.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = myvec.h; sourceTree = "<group>"; };
+		AFEB3A831751FC7000D8419B /* ETF.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = ETF.cpp; sourceTree = "<group>"; };
+		AFEB3A841751FC7000D8419B /* fdog.cpp */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.cpp; path = fdog.cpp; sourceTree = "<group>"; };
 		BBAB23BE13894E4700AA2426 /* GLUT.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = GLUT.framework; path = ../../../libs/glut/lib/osx/GLUT.framework; sourceTree = "<group>"; };
 		E4328143138ABC890047C5CB /* openFrameworksLib.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = openFrameworksLib.xcodeproj; path = ../../../libs/openFrameworksCompiled/project/osx/openFrameworksLib.xcodeproj; sourceTree = SOURCE_ROOT; };
 		E45BE9710E8CC7DD009D7055 /* AGL.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AGL.framework; path = /System/Library/Frameworks/AGL.framework; sourceTree = "<absolute>"; };
@@ -1188,6 +1199,7 @@
 		AF1EEFF21702DA4600A7382A /* libs */ = {
 			isa = PBXGroup;
 			children = (
+				AFEB3A7B1751FC7000D8419B /* CLD */,
 				AF1EEFF41702DA4600A7382A /* ofxCv */,
 			);
 			path = libs;
@@ -1213,6 +1225,7 @@
 		AF1EEFF61702DA4600A7382A /* ofxCv */ = {
 			isa = PBXGroup;
 			children = (
+				AFEB3A781751FBF400D8419B /* ObjectFinder.h */,
 				AF1EEFF71702DA4600A7382A /* Calibration.h */,
 				AF1EEFF81702DA4600A7382A /* ContourFinder.h */,
 				AF1EEFF91702DA4600A7382A /* Distance.h */,
@@ -1229,6 +1242,7 @@
 		AF1EF0001702DA4600A7382A /* src */ = {
 			isa = PBXGroup;
 			children = (
+				AFEB3A791751FBFC00D8419B /* ObjectFinder.cpp */,
 				AF1EF0011702DA4600A7382A /* Calibration.cpp */,
 				AF1EF0021702DA4600A7382A /* ContourFinder.cpp */,
 				AF1EF0031702DA4600A7382A /* Distance.cpp */,
@@ -1246,6 +1260,43 @@
 			isa = PBXGroup;
 			children = (
 				AF1EF00D1702DA4600A7382A /* ofxCv.h */,
+			);
+			path = src;
+			sourceTree = "<group>";
+		};
+		AFEB3A7B1751FC7000D8419B /* CLD */ = {
+			isa = PBXGroup;
+			children = (
+				AFEB3A7C1751FC7000D8419B /* include */,
+				AFEB3A821751FC7000D8419B /* src */,
+			);
+			path = CLD;
+			sourceTree = "<group>";
+		};
+		AFEB3A7C1751FC7000D8419B /* include */ = {
+			isa = PBXGroup;
+			children = (
+				AFEB3A7D1751FC7000D8419B /* CLD */,
+			);
+			path = include;
+			sourceTree = "<group>";
+		};
+		AFEB3A7D1751FC7000D8419B /* CLD */ = {
+			isa = PBXGroup;
+			children = (
+				AFEB3A7E1751FC7000D8419B /* ETF.h */,
+				AFEB3A7F1751FC7000D8419B /* fdog.h */,
+				AFEB3A801751FC7000D8419B /* imatrix.h */,
+				AFEB3A811751FC7000D8419B /* myvec.h */,
+			);
+			path = CLD;
+			sourceTree = "<group>";
+		};
+		AFEB3A821751FC7000D8419B /* src */ = {
+			isa = PBXGroup;
+			children = (
+				AFEB3A831751FC7000D8419B /* ETF.cpp */,
+				AFEB3A841751FC7000D8419B /* fdog.cpp */,
 			);
 			path = src;
 			sourceTree = "<group>";
@@ -1455,6 +1506,9 @@
 				AF1EF0D71702DA4900A7382A /* Utilities.cpp in Sources */,
 				AF1EF0D81702DA4900A7382A /* Wrappers.cpp in Sources */,
 				AFA9C31B1713474200494A56 /* ColorScheme.cpp in Sources */,
+				AFEB3A7A1751FBFC00D8419B /* ObjectFinder.cpp in Sources */,
+				AFEB3A851751FC7000D8419B /* ETF.cpp in Sources */,
+				AFEB3A861751FC7000D8419B /* fdog.cpp in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
