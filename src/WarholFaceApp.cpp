@@ -25,7 +25,8 @@ void WarholFaceApp::setup(){
 	for(int i=0; i<12; ++i){
 		faceFbos[i].allocate(cam.width, cam.height);
 	}
-	//mFaceFeatures.cropArea.set(0,0,cam.width, cam.height);
+	mFaceFeatures.cropArea.set(0,0,cam.width, cam.height);
+	scaleFactor = 1;
 
 	tracker.setup();
 	tracker.setRescale(.5);
@@ -187,6 +188,9 @@ void WarholFaceApp::draw(){
 
 	ofSetColor(255,255,0);
 	ofDrawBitmapString(ofToString((int) ofGetFrameRate()), 10, cam.height+20);
+	if(!(ofGetFrameNum()%60)){
+		cout << ofGetFrameRate() << endl;
+	}
 
 	// create 12
 	for(int i=0; i<12; ++i){
@@ -196,12 +200,23 @@ void WarholFaceApp::draw(){
 		faceFbos[i].end();
 	}
 
+	int i=0;
+	int cx=0, cy=0;
+	float s = 1.0/scaleFactor;
+
 	// can draw more than 12
-	for(int i=0;i<12;++i){
+	while(cy<ofGetHeight()){
 		ofPushMatrix();
-		ofTranslate((i%6)*mFaceFeatures.cropArea.width,(i/6)*mFaceFeatures.cropArea.height);
+		ofTranslate(cx,cy);
+		ofScale(s,s);
 		ofSetColor(255);
 		faceFbos[i].getTextureReference().drawSubsection(0, 0, mFaceFeatures.cropArea.width, mFaceFeatures.cropArea.height, 1,1);
+		i = (i+1)%12;
+		cx = (cx+mFaceFeatures.cropArea.width*s);
+		if(cx > ofGetWidth()){
+			cx = 0;
+			cy += mFaceFeatures.cropArea.height*s;
+		}
 		ofPopMatrix();
 	}
 }
@@ -251,6 +266,12 @@ void WarholFaceApp::keyReleased(int key){
 	}
 	if(key == '+' || key == '='){
 		thresholdValue = (thresholdValue<255)?(thresholdValue+1):thresholdValue;
+	}
+	if(key == 356){
+		scaleFactor = (scaleFactor>1)?(scaleFactor-1):scaleFactor;
+	}
+	if(key == 358){
+		scaleFactor = (scaleFactor<10)?(scaleFactor+1):scaleFactor;
 	}
 }
 

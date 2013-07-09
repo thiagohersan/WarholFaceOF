@@ -52,6 +52,7 @@ public:
 
 	ofFbo faceFbos[12];
 	FaceFeatures mFaceFeatures;
+	unsigned int scaleFactor;
 
 	ofxFaceTracker tracker;
 
